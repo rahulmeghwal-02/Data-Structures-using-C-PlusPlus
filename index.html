@@ -1,1649 +1,1376 @@
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    color: #1a1a2e;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 20px;
-  }
-  .nav {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    padding: 16px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-  .nav button {
-    padding: 10px 18px;
-    border-radius: 25px;
-    border: none;
-    background: #f0f3f7;
-    color: #4a5568;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-  .nav button.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    transform: translateY(-2px);
-  }
-  .nav button:hover:not(.active) {
-    background: #e2e8f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-  .section {
-    display: none;
-  }
-  .section.active {
-    display: block;
-  }
-  .card {
-    background: white;
-    border: none;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-  }
-  .card:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
-  }
-  .badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-right: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .b-blue {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-  }
-  .b-green {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    color: white;
-  }
-  .b-amber {
-    background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
-    color: white;
-  }
-  .b-red {
-    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-    color: white;
-  }
-  h2 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #1a1a2e;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 16px 0 10px;
-    color: #2d3748;
-    border-left: 4px solid #667eea;
-    padding-left: 12px;
-  }
-  p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: #4a5568;
-    margin-bottom: 12px;
-  }
-  pre {
-    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    border: none;
-    border-radius: 12px;
-    padding: 18px;
-    font-size: 13px;
-    font-family: "Courier New", monospace;
-    overflow-x: auto;
-    margin: 14px 0;
-    line-height: 1.8;
-    color: #e2e8f0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-  .kw {
-    color: #67e8f9;
-    font-weight: 600;
-  }
-  .cm {
-    color: #cbd5e0;
-    font-style: italic;
-    opacity: 0.85;
-  }
-  .fn {
-    color: #fbbf24;
-  }
-  .num {
-    color: #fb7185;
-    font-weight: 600;
-  }
-  .str {
-    color: #86efac;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin: 14px 0;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  th {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 12px 16px;
-    text-align: left;
-    border: none;
-    font-weight: 600;
-    font-size: 13px;
-    color: white;
-  }
-  td {
-    padding: 12px 16px;
-    border: none;
-    border-bottom: 1px solid #e2e8f0;
-    color: #4a5568;
-    background: white;
-  }
-  tr:hover td {
-    background: #f7fafc;
-  }
-  td:first-child {
-    font-weight: 600;
-    color: #2d3748;
-  }
-  .grid2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .grid3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-  }
-  .metric {
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-    border: 2px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 18px;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-  .metric:hover {
-    border-color: #667eea;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
-    transform: translateY(-4px);
-  }
-  .metric .val {
-    font-size: 28px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .metric .lbl {
-    font-size: 13px;
-    color: #718096;
-    margin-top: 6px;
-    font-weight: 600;
-  }
-  .tag {
-    font-size: 11px;
-    color: #a0aec0;
-    margin-top: 6px;
-    font-weight: 500;
-  }
-  .viz-area {
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-    border: 2px dashed #cbd5e0;
-    border-radius: 12px;
-    padding: 18px;
-    margin: 14px 0;
-  }
-  .arr-cell {
-    display: inline-block;
-    width: 56px;
-    height: 56px;
-    border: 2.5px solid #cbd5e0;
-    border-radius: 10px;
-    line-height: 56px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 4px;
-    background: white;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  }
-  .arr-cell:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-  }
-  .arr-cell.highlight {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-color: #667eea;
-    color: white;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-  }
-  .arr-cell.top {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    border-color: #48bb78;
-    color: white;
-    box-shadow: 0 8px 20px rgba(72, 187, 120, 0.4);
-  }
-  .arr-cell.empty {
-    background: #f0f3f7;
-    color: #cbd5e0;
-    border-style: dashed;
-    box-shadow: none;
-  }
-  .controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 16px 0;
-  }
-  .controls input {
-    width: 100px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 2px solid #e2e8f0;
-    background: white;
-    color: #1a1a2e;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-  .controls input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  }
-  .controls button {
-    padding: 10px 18px;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  }
-  .controls button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  }
-  .controls button:active {
-    transform: translateY(0);
-  }
-  .controls button.danger {
-    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-    box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
-  }
-  .controls button.danger:hover {
-    box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
-  }
-  .controls button.success {
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
-  }
-  .controls button.success:hover {
-    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
-  }
-  .log {
-    font-size: 13px;
-    color: #2d3748;
-    padding: 14px 16px;
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-    border: 2px solid #e2e8f0;
-    border-left: 4px solid #667eea;
-    border-radius: 8px;
-    margin-top: 12px;
-    min-height: 40px;
-    font-family: "Courier New", monospace;
-    font-weight: 500;
-  }
-  .formula {
-    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    border-left: 4px solid #667eea;
-    padding: 14px 16px;
-    border-radius: 8px;
-    margin: 12px 0;
-    font-size: 14px;
-    font-family: "Courier New", monospace;
-    color: #e2e8f0;
-    font-weight: 500;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  .note {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border: 2px solid #fcd34d;
-    border-radius: 10px;
-    padding: 14px 16px;
-    font-size: 14px;
-    color: #78350f;
-    margin: 14px 0;
-    font-weight: 500;
-  }
-  .appcard {
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 14px;
-    background: white;
-    transition: all 0.3s ease;
-  }
-  .appcard:hover {
-    border-color: #667eea;
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
-    transform: translateY(-4px);
-  }
-  .appcard .icon {
-    font-size: 28px;
-    margin-bottom: 8px;
-  }
-  .appcard h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #2d3748;
-  }
-  .appcard p {
-    font-size: 13px;
-    margin: 0;
-    color: #718096;
-    line-height: 1.6;
-  }
-</style>
+﻿<html lang="en">
+  <head>
+    <style>
+      body {
+        transition: opacity ease-in 0.2s;
+      }
+      body[unresolved] {
+        opacity: 0;
+        display: block;
+        overflow: hidden;
+        position: relative;
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="/___vscode_livepreview_injected_script"
+    ></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Structures - Complete Guide with Programs &amp; Notes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-<div style="padding: 0 0 20px">
-  <div class="nav">
-    <button class="active" onclick="show('arrays')">📦 Arrays</button>
-    <button onclick="show('records')">📋 Records</button>
-    <button onclick="show('stack')">📚 Stack</button>
-    <button onclick="show('stack-impl')">⚙️ Stack (Array)</button>
-    <button onclick="show('queue')">🔄 Queue</button>
-    <button onclick="show('queue-impl')">⚙️ Queue (Array)</button>
-    <button onclick="show('queue-app')">🌐 Applications</button>
-  </div>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #2d3748;
+      }
 
-  <!-- ============ ARRAYS ============ -->
-  <div id="arrays" class="section active">
-    <div class="card">
-      <h2>Arrays</h2>
-      <p>
-        An <strong>array</strong> is a linear, homogeneous data structure that
-        stores a fixed-size sequential collection of elements of the
-        <em>same data type</em> in contiguous memory locations. It is the
-        simplest and most widely used data structure.
-      </p>
-      <div class="grid3" style="margin: 12px 0">
-        <div class="metric">
-          <div class="val">O(1)</div>
-          <div class="lbl">Random Access</div>
-        </div>
-        <div class="metric">
-          <div class="val">O(n)</div>
-          <div class="lbl">Search (unsorted)</div>
-        </div>
-        <div class="metric">
-          <div class="val">O(n)</div>
-          <div class="lbl">Insert / Delete</div>
-        </div>
-      </div>
-    </div>
+      .header {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
+      }
 
-    <div class="card">
-      <h3>Memory Representation</h3>
-      <p>
-        Array elements are stored in <strong>contiguous memory</strong>. For a
-        1D array <code>A[n]</code> with base address <code>B</code> and each
-        element taking <code>W</code> bytes:
-      </p>
-      <div class="formula">Address of A[i] = B + i × W</div>
-      <p>
-        For a <strong>2D array A[r][c]</strong> stored in
-        <em>row-major order</em> (C++ default):
-      </p>
-      <div class="formula">Address of A[i][j] = B + (i × c + j) × W</div>
-      <p>In <em>column-major order</em> (used in Fortran):</p>
-      <div class="formula">Address of A[i][j] = B + (j × r + i) × W</div>
+      .header h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-      <h3>Interactive Array Visualizer</h3>
-      <div class="viz-area">
-        <div id="arr-display" style="margin-bottom: 10px"></div>
-        <div style="font-size: 11px; color: var(--color-text-tertiary)">
-          Index → &nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;
-          2&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;
-          4&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;
-          6&nbsp;&nbsp;&nbsp;&nbsp; 7
-        </div>
-      </div>
-      <div class="controls">
-        <input
-          id="arr-idx"
-          type="number"
-          min="0"
-          max="7"
-          placeholder="Index"
-          value="3"
-        />
-        <input id="arr-val" type="number" placeholder="Value" value="99" />
-        <button class="success" onclick="arrSet()">Set A[i]</button>
-        <button onclick="arrAccess()">Access A[i]</button>
-        <button class="danger" onclick="arrReset()">Reset</button>
-      </div>
-      <div class="log" id="arr-log">
-        Try accessing or setting an element above...
-      </div>
-    </div>
+      .header p {
+        color: #718096;
+        font-size: 15px;
+      }
 
-    <div class="card">
-      <h3>Types of Arrays</h3>
-      <table>
-        <tr>
-          <th>Type</th>
-          <th>Declaration (C++)</th>
-          <th>Key Point</th>
-        </tr>
-        <tr>
-          <td>1D Array</td>
-          <td><code>int A[5];</code></td>
-          <td>Single row of elements</td>
-        </tr>
-        <tr>
-          <td>2D Array</td>
-          <td><code>int A[3][4];</code></td>
-          <td>Matrix — rows × columns</td>
-        </tr>
-        <tr>
-          <td>Multi-D</td>
-          <td><code>int A[2][3][4];</code></td>
-          <td>3D: used in image/volume data</td>
-        </tr>
-        <tr>
-          <td>Dynamic</td>
-          <td><code>int* A = new int[n];</code></td>
-          <td>Size decided at runtime</td>
-        </tr>
-      </table>
-    </div>
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    <div class="card">
-      <h3>Operations on Arrays</h3>
-      <table>
-        <tr>
-          <th>Operation</th>
-          <th>Time</th>
-          <th>Description</th>
-        </tr>
-        <tr>
-          <td>Traversal</td>
-          <td>O(n)</td>
-          <td>Visit every element once</td>
-        </tr>
-        <tr>
-          <td>Access</td>
-          <td>O(1)</td>
-          <td>Direct index → address calculation</td>
-        </tr>
-        <tr>
-          <td>Search (linear)</td>
-          <td>O(n)</td>
-          <td>Compare element-by-element</td>
-        </tr>
-        <tr>
-          <td>Search (binary)</td>
-          <td>O(log n)</td>
-          <td>Only on sorted arrays</td>
-        </tr>
-        <tr>
-          <td>Insertion</td>
-          <td>O(n)</td>
-          <td>Shift elements to make space</td>
-        </tr>
-        <tr>
-          <td>Deletion</td>
-          <td>O(n)</td>
-          <td>Shift elements to close gap</td>
-        </tr>
-      </table>
-      <pre><span class="cm">// C++ Array Operations</span>
-<span class="kw">int</span> A[<span class="num">6</span>] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>, <span class="num">60</span>};
-<span class="kw">int</span> n = <span class="num">6</span>;
+      .units-nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 30px;
+      }
 
-<span class="cm">// 1. Traversal</span>
-<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < n; i++) cout << A[i] << <span class="str">" "</span>;
+      .unit-btn {
+        padding: 16px 20px;
+        border: 2px solid white;
+        background: white;
+        color: #667eea;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
 
-<span class="cm">// 2. Insertion at position pos</span>
-<span class="kw">void</span> <span class="fn">insert</span>(<span class="kw">int</span> A[], <span class="kw">int</span>& n, <span class="kw">int</span> pos, <span class="kw">int</span> val) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = n; i > pos; i--) A[i] = A[i-<span class="num">1</span>]; <span class="cm">// shift right</span>
-    A[pos] = val; n++;
-}
+      .unit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
 
-<span class="cm">// 3. Deletion at position pos</span>
-<span class="kw">void</span> <span class="fn">deleteAt</span>(<span class="kw">int</span> A[], <span class="kw">int</span>& n, <span class="kw">int</span> pos) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = pos; i < n-<span class="num">1</span>; i++) A[i] = A[i+<span class="num">1</span>]; <span class="cm">// shift left</span>
-    n--;
-}</pre>
-    </div>
+      .unit-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: transparent;
+      }
 
-    <div class="card">
-      <h3>Advantages & Limitations</h3>
-      <div class="grid2">
-        <div>
-          <p><span class="badge b-green">Pros</span></p>
-          <p>
-            • O(1) random access by index<br />• Simple memory layout<br />•
-            Cache-friendly (spatial locality)<br />• Best for fixed-size data
-          </p>
-        </div>
-        <div>
-          <p><span class="badge b-red">Cons</span></p>
-          <p>
-            • Fixed size (static arrays)<br />• O(n) insert/delete<br />• Memory
-            waste if underused<br />• Homogeneous only
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+      .unit-section {
+        display: none;
+        animation: fadeIn 0.5s ease-in;
+      }
 
-  <!-- ============ RECORDS ============ -->
-  <div id="records" class="section">
-    <div class="card">
-      <h2>Records (Structures in C++)</h2>
-      <p>
-        A <strong>record</strong> (called <code>struct</code> in C++) is a
-        composite data structure that groups variables of
-        <em>different data types</em> under a single name. Each variable inside
-        is called a <strong>field</strong> or <strong>member</strong>.
-      </p>
-      <div class="note">
-        📌 Unlike arrays (homogeneous), a record/struct can hold
-        <strong>mixed types</strong>: int, float, char, string all together.
-      </div>
-    </div>
+      .unit-section.active {
+        display: block;
+      }
 
-    <div class="card">
-      <h3>Declaration & Memory Layout</h3>
-      <p>
-        Memory for a struct is allocated based on its members plus possible
-        <strong>padding</strong> for alignment.
-      </p>
-      <pre><span class="kw">struct</span> Student {
-    <span class="kw">int</span>    roll;      <span class="cm">// 4 bytes</span>
-    <span class="kw">char</span>   name[<span class="num">30</span>]; <span class="cm">// 30 bytes</span>
-    <span class="kw">float</span>  marks;    <span class="cm">// 4 bytes</span>
-    <span class="kw">char</span>   grade;    <span class="cm">// 1 byte + 3 padding</span>
-}; <span class="cm">// Total: ~42+ bytes (with alignment)</span>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-<span class="cm">// Creating objects</span>
-Student s1;                          <span class="cm">// single record</span>
-Student s1 = {<span class="num">101</span>, <span class="str">"Rahul"</span>, <span class="num">95.5</span>, <span class="str">'A'</span>}; <span class="cm">// initialise</span>
-Student arr[<span class="num">50</span>];                      <span class="cm">// array of records</span>
+      .unit-header {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-left: 6px solid #667eea;
+      }
 
-<span class="cm">// Accessing members — dot operator</span>
-s1.roll  = <span class="num">102</span>;
-s1.marks = <span class="num">88.5</span>;
-cout << s1.name << <span class="str">" : "</span> << s1.grade;</pre>
-      <div class="viz-area">
-        <p
-          style="
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-bottom: 8px;
-          "
-        >
-          Memory layout of Student struct:
+      .unit-header h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+        color: #667eea;
+      }
+
+      .unit-header p {
+        color: #718096;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+
+      .hours-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+      }
+
+      .card h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: #2d3748;
+        border-left: 4px solid #667eea;
+        padding-left: 12px;
+      }
+
+      .card h4 {
+        font-size: 16px;
+        margin: 16px 0 8px;
+        color: #4a5568;
+      }
+
+      .card p {
+        color: #718096;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+
+      .card li {
+        color: #718096;
+        line-height: 1.8;
+        margin-left: 20px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .topic-card {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .topic-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .topic-card h4 {
+        color: #667eea;
+        margin-bottom: 8px;
+      }
+
+      .topic-card p {
+        font-size: 13px;
+        color: #718096;
+      }
+
+      .program-section {
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+
+      .program-section h4 {
+        color: #e2e8f0;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .program-link {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-decoration: none;
+        margin: 4px 8px 4px 0;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .program-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .note-box {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 4px solid #f59e0b;
+        padding: 14px;
+        border-radius: 8px;
+        margin: 16px 0;
+        color: #78350f;
+        font-size: 14px;
+      }
+
+      .operations-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 13px;
+      }
+
+      .operations-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .operations-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #718096;
+      }
+
+      .operations-table tr:hover td {
+        background: #f7fafc;
+      }
+
+      .code-block {
+        background: #1a202c;
+        color: #e2e8f0;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 12px 0;
+      }
+
+      .metric-box {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+      }
+
+      .metric-box .value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #667eea;
+      }
+
+      .metric-box .label {
+        font-size: 12px;
+        color: #718096;
+        margin-top: 6px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 4px 4px 4px 0;
+      }
+
+      .badge-blue {
+        background: #dbeafe;
+        color: #0c4a6e;
+      }
+
+      .badge-green {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .badge-red {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .badge-yellow {
+        background: #fef3c7;
+        color: #78350f;
+      }
+
+      @media (max-width: 768px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+
+        .header h1 {
+          font-size: 24px;
+        }
+
+        .units-nav {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body data-new-gr-c-s-check-loaded="14.1282.0" data-gr-ext-installed="">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>Data Structures with Programs &amp; Notes</h1>
+        <p>
+          Complete guide for all 5 units with detailed explanations, operations,
+          programs, and notes
         </p>
-        <div style="display: flex; gap: 2px; align-items: stretch">
-          <div
-            style="
-              padding: 8px;
-              border-radius: 6px;
-              background: var(--color-background-info);
-              color: var(--color-text-info);
-              font-size: 11px;
-              text-align: center;
-              min-width: 60px;
-            "
-          >
-            <div style="font-weight: 500">roll</div>
-            <div style="color: var(--color-text-tertiary)">4B</div>
-          </div>
-          <div
-            style="
-              padding: 8px;
-              border-radius: 6px;
-              background: var(--color-background-success);
-              color: var(--color-text-success);
-              font-size: 11px;
-              text-align: center;
-              flex: 1;
-            "
-          >
-            <div style="font-weight: 500">name[30]</div>
-            <div>30B</div>
-          </div>
-          <div
-            style="
-              padding: 8px;
-              border-radius: 6px;
-              background: var(--color-background-warning);
-              color: var(--color-text-warning);
-              font-size: 11px;
-              text-align: center;
-              min-width: 60px;
-            "
-          >
-            <div style="font-weight: 500">marks</div>
-            <div>4B</div>
-          </div>
-          <div
-            style="
-              padding: 8px;
-              border-radius: 6px;
-              background: var(--color-background-danger);
-              color: var(--color-text-danger);
-              font-size: 11px;
-              text-align: center;
-              min-width: 50px;
-            "
-          >
-            <div style="font-weight: 500">grade</div>
-            <div>1+3B</div>
+      </div>
+
+      <!-- Unit Navigation -->
+      <div class="units-nav">
+        <button class="unit-btn active" onclick="switchUnit(1)">
+          UNIT 1<br /><span style="font-size: 11px">Arrays, Stack, Queue</span>
+        </button>
+        <button class="unit-btn" onclick="switchUnit(2)">
+          UNIT 2<br /><span style="font-size: 11px">Linked Lists</span>
+        </button>
+        <button class="unit-btn" onclick="switchUnit(3)">
+          UNIT 3<br /><span style="font-size: 11px">Trees</span>
+        </button>
+        <button class="unit-btn" onclick="switchUnit(4)">
+          UNIT 4<br /><span style="font-size: 11px">Graphs</span>
+        </button>
+        <button class="unit-btn" onclick="switchUnit(5)">
+          UNIT 5<br /><span style="font-size: 11px">Search &amp; Sort</span>
+        </button>
+      </div>
+
+      <!-- UNIT 1 -->
+      <div id="unit1" class="unit-section active">
+        <div class="unit-header">
+          <h2>UNIT 1: Arrays, Records, Stack &amp; Queue</h2>
+          <span class="hours-badge">12 Hours</span>
+          <p>
+            Linear data structures: arrays, records, stack (LIFO), queue (FIFO),
+            and applications.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Arrays</h3>
+          <p>
+            Linear homogeneous data structure storing elements in contiguous
+            memory.
+          </p>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Operation</th>
+                <th>Time</th>
+                <th>Notes</th>
+              </tr>
+              <tr>
+                <td>Random Access</td>
+                <td>O(1)</td>
+                <td>Direct index access</td>
+              </tr>
+              <tr>
+                <td>Search</td>
+                <td>O(n)</td>
+                <td>Linear or binary search</td>
+              </tr>
+              <tr>
+                <td>Insert</td>
+                <td>O(n)</td>
+                <td>May need shift</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td>O(n)</td>
+                <td>Elements shift</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Programs:</h4>
+          <div class="program-section">
+            <a href="unit-1/Arrays/array.cpp" class="program-link"
+              >Array Operations</a
+            >
+            <a href="unit-1/Arrays/insert.cpp" class="program-link"
+              >Insert Element</a
+            >
+            <a href="unit-1/Arrays/delete.cpp" class="program-link"
+              >Delete Element</a
+            >
           </div>
         </div>
-        <div
-          style="
-            font-size: 11px;
-            color: var(--color-text-tertiary);
-            margin-top: 6px;
-          "
-        >
-          ← Contiguous memory (low address to high address) →
+
+        <div class="card">
+          <h3>Records (Structures)</h3>
+          <p>Composite data structure grouping mixed data types together.</p>
+          <h4>Programs:</h4>
+          <div class="program-section">
+            <a href="unit-1/Records/rec.cpp" class="program-link"
+              >Record Operations</a
+            >
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="card">
-      <h3>Nested Structures</h3>
-      <pre><span class="kw">struct</span> Date {
-    <span class="kw">int</span> day, month, year;
-};
-
-<span class="kw">struct</span> Employee {
-    <span class="kw">int</span>    emp_id;
-    <span class="kw">char</span>   name[<span class="num">40</span>];
-    Date   dob;       <span class="cm">// nested struct</span>
-    <span class="kw">double</span> salary;
-};
-
-Employee e1;
-e1.emp_id     = <span class="num">1001</span>;
-e1.dob.day    = <span class="num">15</span>;     <span class="cm">// access nested member</span>
-e1.dob.month  = <span class="num">8</span>;
-e1.dob.year   = <span class="num">2000</span>;
-e1.salary     = <span class="num">75000.0</span>;</pre>
-    </div>
-
-    <div class="card">
-      <h3>Pointer to Structure</h3>
-      <pre><span class="kw">struct</span> Node {
-    <span class="kw">int</span>   data;
-    Node* next;  <span class="cm">// self-referential (linked list basis)</span>
-};
-
-Student* ptr = <span class="kw">new</span> Student;  <span class="cm">// dynamic allocation</span>
-ptr->roll  = <span class="num">103</span>;             <span class="cm">// arrow operator for pointers</span>
-ptr->marks = <span class="num">91.0</span>;
-<span class="kw">delete</span> ptr;                   <span class="cm">// free memory</span></pre>
-      <table>
-        <tr>
-          <th>Access Method</th>
-          <th>Syntax</th>
-          <th>When Used</th>
-        </tr>
-        <tr>
-          <td>Dot operator</td>
-          <td><code>obj.member</code></td>
-          <td>Object directly</td>
-        </tr>
-        <tr>
-          <td>Arrow operator</td>
-          <td><code>ptr->member</code></td>
-          <td>Pointer to object</td>
-        </tr>
-        <tr>
-          <td>Dereference</td>
-          <td><code>(*ptr).member</code></td>
-          <td>Equivalent to arrow</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- ============ STACK ============ -->
-  <div id="stack" class="section">
-    <div class="card">
-      <h2>Stack</h2>
-      <p>
-        A <strong>stack</strong> is a linear data structure that follows the
-        <strong>LIFO</strong> (Last In, First Out) principle — the element
-        inserted last is the first to be removed. Think of a stack of plates:
-        you always add and remove from the top.
-      </p>
-      <div class="grid3" style="margin: 12px 0">
-        <div class="metric">
-          <div class="val">LIFO</div>
-          <div class="lbl">Principle</div>
-        </div>
-        <div class="metric">
-          <div class="val">O(1)</div>
-          <div class="lbl">Push & Pop</div>
-        </div>
-        <div class="metric">
-          <div class="val">TOP</div>
-          <div class="lbl">Active end</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Operations on Stack</h3>
-      <table>
-        <tr>
-          <th>Operation</th>
-          <th>Description</th>
-          <th>Condition Check</th>
-        </tr>
-        <tr>
-          <td>push(x)</td>
-          <td>Insert element x at top</td>
-          <td>Fails if FULL (overflow)</td>
-        </tr>
-        <tr>
-          <td>pop()</td>
-          <td>Remove top element</td>
-          <td>Fails if EMPTY (underflow)</td>
-        </tr>
-        <tr>
-          <td>peek() / top()</td>
-          <td>View top without removing</td>
-          <td>Fails if EMPTY</td>
-        </tr>
-        <tr>
-          <td>isEmpty()</td>
-          <td>Check if stack is empty</td>
-          <td>Returns true if TOP == -1</td>
-        </tr>
-        <tr>
-          <td>isFull()</td>
-          <td>Check if stack is full</td>
-          <td>Returns true if TOP == MAX-1</td>
-        </tr>
-        <tr>
-          <td>size()</td>
-          <td>Number of elements</td>
-          <td>Returns TOP + 1</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>Stack Visualizer (Interactive)</h3>
-      <div class="viz-area">
-        <p
-          style="
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-bottom: 8px;
-          "
-        >
-          Stack (Max = 6) — TOP pointer shown in green
-        </p>
-        <div
-          id="stack-display"
-          style="
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 4px;
-            min-height: 80px;
-            align-items: flex-start;
-            padding: 4px;
-          "
-        ></div>
-        <div
-          style="
-            width: 58px;
-            border-top: 2px solid var(--color-border-secondary);
-            margin-top: 4px;
-            text-align: center;
-            font-size: 11px;
-            color: var(--color-text-tertiary);
-            padding-top: 2px;
-          "
-        >
-          BOTTOM
-        </div>
-      </div>
-      <div class="controls">
-        <input id="stack-val" type="number" placeholder="Value" value="42" />
-        <button class="success" onclick="stackPush()">Push ↑</button>
-        <button class="danger" onclick="stackPop()">Pop ↓</button>
-        <button onclick="stackPeek()">Peek 👀</button>
-        <button onclick="stackReset()">Reset</button>
-      </div>
-      <div class="log" id="stack-log">Stack is empty. Push some elements!</div>
-    </div>
-
-    <div class="card">
-      <h3>Stack Conditions</h3>
-      <pre><span class="cm">// Stack Overflow  → push on a full stack</span>
-<span class="kw">if</span> (top == MAX - <span class="num">1</span>) { cout << <span class="str">"Overflow!"</span>; <span class="kw">return</span>; }
-
-<span class="cm">// Stack Underflow → pop/peek on empty stack</span>
-<span class="kw">if</span> (top == -<span class="num">1</span>)     { cout << <span class="str">"Underflow!"</span>; <span class="kw">return</span>; }</pre>
-    </div>
-
-    <div class="card">
-      <h3>Applications of Stack</h3>
-      <div class="grid2">
-        <div class="appcard">
-          <h4>Function Call Stack</h4>
+        <div class="card">
+          <h3>Stack (LIFO)</h3>
           <p>
-            Each function call pushes a frame; return pops it. Enables
-            recursion.
+            Last-In-First-Out structure: last element inserted is first removed.
+          </p>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Operation</th>
+                <th>Time</th>
+                <th>Condition</th>
+              </tr>
+              <tr>
+                <td>Push</td>
+                <td>O(1)</td>
+                <td>Overflow: top == MAX-1</td>
+              </tr>
+              <tr>
+                <td>Pop</td>
+                <td>O(1)</td>
+                <td>Underflow: top == -1</td>
+              </tr>
+              <tr>
+                <td>Peek</td>
+                <td>O(1)</td>
+                <td>View top</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Applications:</h4>
+          <ul>
+            <li>Function calls and recursion</li>
+            <li>Expression evaluation (infix to postfix)</li>
+            <li>Bracket matching</li>
+            <li>Undo/Redo operations</li>
+            <li>Browser back button</li>
+          </ul>
+          <h4>Programs:</h4>
+          <div class="program-section">
+            <a href="unit-1/Stack/stack.cpp" class="program-link"
+              >Stack Implementation</a
+            >
+            <a href="unit-1/Stack/stack_stl.cpp" class="program-link"
+              >Stack Using STL</a
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Queue (FIFO)</h3>
+          <p>First-In-First-Out structure: first element is first removed.</p>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Operation</th>
+                <th>Time</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td>Enqueue</td>
+                <td>O(1)</td>
+                <td>Insert at rear</td>
+              </tr>
+              <tr>
+                <td>Dequeue</td>
+                <td>O(1)</td>
+                <td>Remove from front</td>
+              </tr>
+              <tr>
+                <td>Peek</td>
+                <td>O(1)</td>
+                <td>View front/rear</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Queue Types:</h4>
+          <ul>
+            <li>Linear Queue: Simple FIFO</li>
+            <li>Circular Queue: Wraps around, eliminates false overflow</li>
+            <li>Double Ended Queue (Deque): Insert/delete from both ends</li>
+            <li>Priority Queue: Elements by priority, not arrival order</li>
+          </ul>
+          <h4>Applications:</h4>
+          <ul>
+            <li>CPU process scheduling</li>
+            <li>Printer job queue</li>
+            <li>BFS graph traversal</li>
+            <li>Call center systems</li>
+            <li>I/O buffering</li>
+          </ul>
+          <h4>Programs:</h4>
+          <div class="program-section">
+            <a href="unit-1/Queue/queue.cpp" class="program-link"
+              >Queue Implementation</a
+            >
+            <a href="unit-1/Queue/queue_stl.cpp" class="program-link"
+              >Queue Using STL</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 2 -->
+      <div id="unit2" class="unit-section">
+        <div class="unit-header">
+          <h2>UNIT 2: Linked Lists</h2>
+          <span class="hours-badge">9 Hours</span>
+          <p>
+            Dynamic data structures using node pointers: singly, doubly, and
+            circular linked lists.
           </p>
         </div>
-        <div class="appcard">
-          <h4>Expression Evaluation</h4>
-          <p>Infix → Postfix conversion; evaluating postfix expressions.</p>
-        </div>
-        <div class="appcard">
-          <h4>Undo / Redo</h4>
+
+        <div class="card">
+          <h3>Singly Linked List</h3>
           <p>
-            Text editors push states. Undo = pop. Two stacks for redo support.
+            Chain of nodes where each node has data and pointer to next node.
+          </p>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Operation</th>
+                <th>Time</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td>Traversal</td>
+                <td>O(n)</td>
+                <td>Visit all nodes</td>
+              </tr>
+              <tr>
+                <td>Search</td>
+                <td>O(n)</td>
+                <td>Linear search</td>
+              </tr>
+              <tr>
+                <td>Insert at start</td>
+                <td>O(1)</td>
+                <td>New head</td>
+              </tr>
+              <tr>
+                <td>Insert at position</td>
+                <td>O(n)</td>
+                <td>After traverse</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td>O(n)</td>
+                <td>Find and remove</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Advantages:</h4>
+          <ul>
+            <li>Dynamic size allocation</li>
+            <li>No memory waste</li>
+            <li>O(1) insert/delete if position known</li>
+            <li>Flexible memory usage</li>
+          </ul>
+          <h4>Programs:</h4>
+          <div class="program-section">
+            <a href="unit-2/linked-lists/linked_list.cpp" class="program-link"
+              >Linked List Operations</a
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Doubly Linked List</h3>
+          <p>
+            Each node has prev and next pointers for bidirectional traversal.
+          </p>
+          <h4>Advantages over Singly:</h4>
+          <ul>
+            <li>Forward and backward traversal</li>
+            <li>O(1) deletion with node pointer</li>
+            <li>Better for undo/redo</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Circular Linked Lists</h3>
+          <p>Last node points back to first node, creating a ring.</p>
+          <h4>Circular Singly LL:</h4>
+          <ul>
+            <li>No NULL pointers</li>
+            <li>Any node accessible from start</li>
+            <li>Round-robin scheduling</li>
+          </ul>
+          <h4>Circular Doubly LL:</h4>
+          <ul>
+            <li>Bidirectional with circularity</li>
+            <li>Most flexible traversal</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- UNIT 3 -->
+      <div id="unit3" class="unit-section">
+        <div class="unit-header">
+          <h2>UNIT 3: Tree Structures</h2>
+          <span class="hours-badge">8 Hours</span>
+          <p>
+            Binary Search Trees, AVL Trees, B+ Trees, and traversal methods.
           </p>
         </div>
-        <div class="appcard">
-          <h4>Bracket Matching</h4>
-          <p>Compilers check ( ) [ ] { } balance using a stack.</p>
+
+        <div class="card">
+          <h3>Binary Search Tree (BST)</h3>
+          <p>
+            Binary tree: left child &lt; parent &lt; right child. Enables
+            efficient sorted data operations.
+          </p>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Operation</th>
+                <th>Avg Time</th>
+                <th>Worst Time</th>
+              </tr>
+              <tr>
+                <td>Search</td>
+                <td>O(log n)</td>
+                <td>O(n)</td>
+              </tr>
+              <tr>
+                <td>Insert</td>
+                <td>O(log n)</td>
+                <td>O(n)</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td>O(log n)</td>
+                <td>O(n)</td>
+              </tr>
+              <tr>
+                <td>Traversal</td>
+                <td>O(n)</td>
+                <td>O(n)</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="appcard">
-          <h4>Backtracking</h4>
-          <p>Maze solving, DFS graph traversal, game state management.</p>
+
+        <div class="card">
+          <h3>Tree Traversal Methods</h3>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Method</th>
+                <th>Order</th>
+                <th>Use Case</th>
+              </tr>
+              <tr>
+                <td>In-Order</td>
+                <td>Left - Root - Right</td>
+                <td>Sorted output</td>
+              </tr>
+              <tr>
+                <td>Pre-Order</td>
+                <td>Root - Left - Right</td>
+                <td>Tree copy</td>
+              </tr>
+              <tr>
+                <td>Post-Order</td>
+                <td>Left - Right - Root</td>
+                <td>Tree deletion</td>
+              </tr>
+              <tr>
+                <td>Level-Order (BFS)</td>
+                <td>Level by level</td>
+                <td>Serialization</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="appcard">
-          <h4>Browser History</h4>
-          <p>Back button = pop current page and return to previous.</p>
+
+        <div class="card">
+          <h3>AVL Tree (Self-Balancing BST)</h3>
+          <p>
+            Automatically maintains balance. Height difference between subtrees
+            &lt;= 1.
+          </p>
+          <ul>
+            <li>Balance Factor: height(left) - height(right) in {-1, 0, 1}</li>
+            <li>Rotations: LL, RR, LR, RL</li>
+            <li>Guaranteed O(log n) operations</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>B+ Tree</h3>
+          <p>
+            Multi-way tree optimized for disk I/O. All data in leaves, internal
+            nodes for routing.
+          </p>
+          <ul>
+            <li>Used in databases (MySQL, SQLite)</li>
+            <li>Efficient range queries</li>
+            <li>Minimizes disk seeks</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- UNIT 4 -->
+      <div id="unit4" class="unit-section">
+        <div class="unit-header">
+          <h2>UNIT 4: Graph Structures</h2>
+          <span class="hours-badge">13 Hours</span>
+          <p>Graph representations, traversals, shortest paths algorithms.</p>
+        </div>
+
+        <div class="card">
+          <h3>Graph Representations</h3>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Property</th>
+                <th>Adjacency Matrix</th>
+                <th>Adjacency List</th>
+              </tr>
+              <tr>
+                <td>Space</td>
+                <td>O(V²)</td>
+                <td>O(V+E)</td>
+              </tr>
+              <tr>
+                <td>Add Edge</td>
+                <td>O(1)</td>
+                <td>O(1)</td>
+              </tr>
+              <tr>
+                <td>Check Edge</td>
+                <td>O(1)</td>
+                <td>O(degree)</td>
+              </tr>
+              <tr>
+                <td>Best For</td>
+                <td>Dense graphs</td>
+                <td>Sparse graphs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Graph Traversals</h3>
+          <h4>Breadth-First Search (BFS):</h4>
+          <ul>
+            <li>Level-by-level using queue</li>
+            <li>Time: O(V+E)</li>
+            <li>Shortest path (unweighted), connectivity check</li>
+          </ul>
+          <h4>Depth-First Search (DFS):</h4>
+          <ul>
+            <li>Deep search using stack/recursion</li>
+            <li>Time: O(V+E)</li>
+            <li>Cycle detection, topological sort, connected components</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Shortest Path Algorithms</h3>
+          <h4>Dijkstra (Single-Source):</h4>
+          <ul>
+            <li>Time: O((V+E)logV) with min-heap</li>
+            <li>No negative weights</li>
+            <li>GPS navigation, routing protocols</li>
+          </ul>
+          <h4>Floyd-Warshall (All-Pairs):</h4>
+          <ul>
+            <li>Time: O(V³), Space: O(V²)</li>
+            <li>Works with negative weights (no cycles)</li>
+            <li>All-pairs shortest paths</li>
+          </ul>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Algorithm</th>
+                <th>Time</th>
+                <th>Negative Weights</th>
+              </tr>
+              <tr>
+                <td>Dijkstra</td>
+                <td>O((V+E)logV)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Floyd-Warshall</td>
+                <td>O(V³)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Bellman-Ford</td>
+                <td>O(VE)</td>
+                <td>Yes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- UNIT 5 -->
+      <div id="unit5" class="unit-section">
+        <div class="unit-header">
+          <h2>UNIT 5: Searching &amp; Sorting</h2>
+          <span class="hours-badge">12 Hours</span>
+          <p>
+            Efficient searching and sorting algorithms with complexity analysis.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Searching Algorithms</h3>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Algorithm</th>
+                <th>Time</th>
+                <th>Space</th>
+                <th>Sorted Required</th>
+              </tr>
+              <tr>
+                <td>Linear Search</td>
+                <td>O(n)</td>
+                <td>O(1)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Binary Search</td>
+                <td>O(log n)</td>
+                <td>O(1)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Hashing</td>
+                <td>O(1)*</td>
+                <td>O(n)</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Linear Search: O(n)</h4>
+          <ul>
+            <li>Works on unsorted data</li>
+            <li>Simple but slow for large arrays</li>
+          </ul>
+          <h4>Binary Search: O(log n)</h4>
+          <ul>
+            <li>Divide search space in half</li>
+            <li>Requires sorted array</li>
+            <li>Fast for large datasets</li>
+          </ul>
+          <h4>Hashing: O(1)*</h4>
+          <ul>
+            <li>Hash function maps keys to memory</li>
+            <li>Collision handling: chaining or open addressing</li>
+            <li>Frequent lookups</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Sorting Algorithms</h3>
+          <table class="operations-table">
+            <tbody>
+              <tr>
+                <th>Algorithm</th>
+                <th>Avg</th>
+                <th>Worst</th>
+                <th>Space</th>
+                <th>Stable</th>
+              </tr>
+              <tr>
+                <td>Selection</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Bubble</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Insertion</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Merge</td>
+                <td>O(nlogn)</td>
+                <td>O(nlogn)</td>
+                <td>O(n)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Quick</td>
+                <td>O(nlogn)</td>
+                <td>O(n²)</td>
+                <td>O(logn)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Heap</td>
+                <td>O(nlogn)</td>
+                <td>O(nlogn)</td>
+                <td>O(1)</td>
+                <td>No</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>When to Use:</h4>
+          <div class="note-box">
+            <strong>Quick Sort:</strong> Default choice, fast in practice<br />
+            <strong>Merge Sort:</strong> Need guaranteed O(nlogn) or
+            stability<br />
+            <strong>Heap Sort:</strong> In-place O(nlogn), extra space
+            limited<br />
+            <strong>Insertion/Bubble:</strong> Nearly sorted data OR small
+            arrays only
+          </div>
+
+          <h4>Real-World Usage:</h4>
+          <ul>
+            <li>Java: Arrays.sort() uses Timsort (hybrid)</li>
+            <li>Python: sorted() uses Timsort</li>
+            <li>C++: std::sort() uses introsort (hybrid)</li>
+            <li>
+              Databases: Merge sort for external sorting, B+ trees for indexing
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ============ STACK IMPLEMENTATION ============ -->
-  <div id="stack-impl" class="section">
-    <div class="card">
-      <h2>Stack Implementation using Array</h2>
-      <p>
-        An array-based stack uses a fixed-size array and a
-        <code>top</code> variable (initialised to <code>-1</code>) to track the
-        topmost element. It is the simplest and most efficient implementation.
-      </p>
-      <div class="note">
-        📌 <strong>top = -1</strong> means the stack is empty.
-        <strong>top = MAX-1</strong> means the stack is full.
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Complete C++ Implementation</h3>
-      <pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">#define</span> MAX <span class="num">100</span>   <span class="cm">// maximum stack size</span>
-
-<span class="kw">class</span> Stack {
-<span class="kw">private</span>:
-    <span class="kw">int</span> arr[MAX];
-    <span class="kw">int</span> top;
-
-<span class="kw">public</span>:
-    Stack() { top = -<span class="num">1</span>; }  <span class="cm">// constructor</span>
-
-    <span class="cm">// Check if empty</span>
-    <span class="kw">bool</span> <span class="fn">isEmpty</span>() {
-        <span class="kw">return</span> top == -<span class="num">1</span>;
-    }
-
-    <span class="cm">// Check if full</span>
-    <span class="kw">bool</span> <span class="fn">isFull</span>() {
-        <span class="kw">return</span> top == MAX - <span class="num">1</span>;
-    }
-
-    <span class="cm">// Push operation — O(1)</span>
-    <span class="kw">void</span> <span class="fn">push</span>(<span class="kw">int</span> x) {
-        <span class="kw">if</span> (<span class="fn">isFull</span>()) {
-            cout << <span class="str">"Stack Overflow!\n"</span>;
-            <span class="kw">return</span>;
+    <script>
+      function switchUnit(unitNum) {
+        for (let i = 1; i <= 5; i++) {
+          const section = document.getElementById("unit" + i);
+          if (section) section.classList.remove("active");
         }
-        arr[++top] = x;   <span class="cm">// increment top, then store</span>
-        cout << x << <span class="str">" pushed\n"</span>;
-    }
+        const activeSection = document.getElementById("unit" + unitNum);
+        if (activeSection) activeSection.classList.add("active");
 
-    <span class="cm">// Pop operation — O(1)</span>
-    <span class="kw">int</span> <span class="fn">pop</span>() {
-        <span class="kw">if</span> (<span class="fn">isEmpty</span>()) {
-            cout << <span class="str">"Stack Underflow!\n"</span>;
-            <span class="kw">return</span> -<span class="num">1</span>;
+        const buttons = document.querySelectorAll(".unit-btn");
+        buttons.forEach((btn, idx) => {
+          if (idx + 1 === unitNum) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+
+        window.scrollTo(0, 0);
+      }
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Structures - Complete Guide with Programs &amp; Notes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #2d3748;
+      }
+      .header {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
+      }
+      .header h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header p {
+        color: #718096;
+        font-size: 15px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .units-nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+      .unit-btn {
+        padding: 16px 20px;
+        border: 2px solid white;
+        background: white;
+        color: #667eea;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .unit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+      .unit-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: transparent;
+      }
+      .unit-section {
+        display: none;
+        animation: fadeIn 0.5s ease-in;
+      }
+      .unit-section.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-        <span class="kw">return</span> arr[top--];  <span class="cm">// return top, then decrement</span>
-    }
-
-    <span class="cm">// Peek / Top — O(1)</span>
-    <span class="kw">int</span> <span class="fn">peek</span>() {
-        <span class="kw">if</span> (<span class="fn">isEmpty</span>()) {
-            cout << <span class="str">"Stack is empty!\n"</span>;
-            <span class="kw">return</span> -<span class="num">1</span>;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        <span class="kw">return</span> arr[top];
-    }
-
-    <span class="cm">// Size</span>
-    <span class="kw">int</span> <span class="fn">size</span>() { <span class="kw">return</span> top + <span class="num">1</span>; }
-
-    <span class="cm">// Display</span>
-    <span class="kw">void</span> <span class="fn">display</span>() {
-        cout << <span class="str">"Stack (top→bottom): "</span>;
-        <span class="kw">for</span> (<span class="kw">int</span> i = top; i >= <span class="num">0</span>; i--)
-            cout << arr[i] << <span class="str">" "</span>;
-        cout << endl;
-    }
-};
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    Stack s;
-    s.<span class="fn">push</span>(<span class="num">10</span>);  s.<span class="fn">push</span>(<span class="num">20</span>);  s.<span class="fn">push</span>(<span class="num">30</span>);
-    s.<span class="fn">display</span>();            <span class="cm">// 30 20 10</span>
-    cout << s.<span class="fn">peek</span>();      <span class="cm">// 30</span>
-    cout << s.<span class="fn">pop</span>();       <span class="cm">// 30 removed</span>
-    s.<span class="fn">display</span>();            <span class="cm">// 20 10</span>
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-    </div>
-
-    <div class="card">
-      <h3>State Trace — push(10), push(20), push(30), pop()</h3>
-      <table>
-        <tr>
-          <th>Operation</th>
-          <th>arr state</th>
-          <th>top</th>
-          <th>Result</th>
-        </tr>
-        <tr>
-          <td>Initial</td>
-          <td>[ ]</td>
-          <td>-1</td>
-          <td>Empty</td>
-        </tr>
-        <tr>
-          <td>push(10)</td>
-          <td>[10]</td>
-          <td>0</td>
-          <td>10 stored at index 0</td>
-        </tr>
-        <tr>
-          <td>push(20)</td>
-          <td>[10, 20]</td>
-          <td>1</td>
-          <td>20 stored at index 1</td>
-        </tr>
-        <tr>
-          <td>push(30)</td>
-          <td>[10, 20, 30]</td>
-          <td>2</td>
-          <td>30 stored at index 2</td>
-        </tr>
-        <tr>
-          <td>pop()</td>
-          <td>[10, 20]</td>
-          <td>1</td>
-          <td>Returns 30</td>
-        </tr>
-        <tr>
-          <td>peek()</td>
-          <td>[10, 20]</td>
-          <td>1</td>
-          <td>Returns 20 (no change)</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>Infix → Postfix using Stack</h3>
-      <p>A classic application of stack in expression conversion:</p>
-      <pre><span class="cm">// Convert A+B*C to ABC*+</span>
-<span class="cm">// Rules: operand → output; operator → compare precedence with stack top</span>
-<span class="cm">// Precedence: * / > + -   ( has lowest when in stack</span>
-
-<span class="kw">int</span> <span class="fn">prec</span>(<span class="kw">char</span> op) {
-    <span class="kw">if</span> (op == <span class="str">'*'</span> || op == <span class="str">'/'</span>) <span class="kw">return</span> <span class="num">2</span>;
-    <span class="kw">if</span> (op == <span class="str">'+'</span> || op == <span class="str">'-'</span>) <span class="kw">return</span> <span class="num">1</span>;
-    <span class="kw">return</span> <span class="num">0</span>;
-}
-<span class="cm">// Example: A+B*C → scan left to right
-// A  → output: A
-// +  → push:   [+]          output: A
-// B  → output: AB
-// *  → * > +, push: [+,*]  output: AB
-// C  → output: ABC
-// end→ pop all: ABC*+</span></pre>
-    </div>
-  </div>
-
-  <!-- ============ QUEUE ============ -->
-  <div id="queue" class="section">
-    <div class="card">
-      <h2>Queue</h2>
-      <p>
-        A <strong>queue</strong> is a linear data structure that follows the
-        <strong>FIFO</strong> (First In, First Out) principle — the element
-        inserted first is the first to be removed. Think of a real-life queue at
-        a ticket counter.
-      </p>
-      <div class="grid3" style="margin: 12px 0">
-        <div class="metric">
-          <div class="val">FIFO</div>
-          <div class="lbl">Principle</div>
-        </div>
-        <div class="metric">
-          <div class="val">REAR</div>
-          <div class="lbl">Insert end</div>
-        </div>
-        <div class="metric">
-          <div class="val">FRONT</div>
-          <div class="lbl">Delete end</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Operations on Queue</h3>
-      <table>
-        <tr>
-          <th>Operation</th>
-          <th>Description</th>
-          <th>Affected Pointer</th>
-        </tr>
-        <tr>
-          <td>enqueue(x)</td>
-          <td>Insert x at REAR</td>
-          <td>REAR = REAR + 1</td>
-        </tr>
-        <tr>
-          <td>dequeue()</td>
-          <td>Remove from FRONT</td>
-          <td>FRONT = FRONT + 1</td>
-        </tr>
-        <tr>
-          <td>front()</td>
-          <td>View FRONT element</td>
-          <td>No change</td>
-        </tr>
-        <tr>
-          <td>rear()</td>
-          <td>View REAR element</td>
-          <td>No change</td>
-        </tr>
-        <tr>
-          <td>isEmpty()</td>
-          <td>Check empty</td>
-          <td>FRONT > REAR</td>
-        </tr>
-        <tr>
-          <td>isFull()</td>
-          <td>Check full (array)</td>
-          <td>REAR == MAX-1</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>Types of Queues</h3>
-      <div class="grid2">
-        <div class="appcard">
-          <h4><span class="badge b-blue">Simple</span> Linear Queue</h4>
-          <p>
-            FRONT and REAR move in one direction. Once REAR reaches end, no more
-            insert even if space at front (false overflow). Array-based.
-          </p>
-        </div>
-        <div class="appcard">
-          <h4><span class="badge b-green">Circular</span> Circular Queue</h4>
-          <p>
-            REAR wraps around to index 0 after reaching MAX-1. Eliminates false
-            overflow. Best array implementation.
-          </p>
-        </div>
-        <div class="appcard">
-          <h4>
-            <span class="badge b-amber">Double</span> Deque (Double Ended)
-          </h4>
-          <p>
-            Insert and delete from BOTH ends. Two variants: input-restricted and
-            output-restricted deque.
-          </p>
-        </div>
-        <div class="appcard">
-          <h4><span class="badge b-red">Priority</span> Priority Queue</h4>
-          <p>
-            Elements dequeued based on priority, not arrival order. Used in
-            scheduling, Dijkstra's algorithm.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Queue Visualizer (Interactive)</h3>
-      <div class="viz-area">
-        <p
-          style="
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-bottom: 6px;
-          "
-        >
-          Queue (Max = 7) — FRONT = green, REAR = amber
-        </p>
-        <div
-          id="queue-display"
-          style="
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            min-height: 60px;
-            align-items: center;
-          "
-        ></div>
-        <div
-          id="queue-labels"
-          style="
-            font-size: 11px;
-            color: var(--color-text-tertiary);
-            margin-top: 4px;
-          "
-        ></div>
-      </div>
-      <div class="controls">
-        <input id="queue-val" type="number" placeholder="Value" value="55" />
-        <button class="success" onclick="queueEnqueue()">Enqueue →</button>
-        <button class="danger" onclick="queueDequeue()">← Dequeue</button>
-        <button onclick="queueReset()">Reset</button>
-      </div>
-      <div class="log" id="queue-log">
-        Queue is empty. Enqueue some elements!
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ QUEUE IMPLEMENTATION ============ -->
-  <div id="queue-impl" class="section">
-    <div class="card">
-      <h2>Queue Implementation using Array</h2>
-      <p>
-        Uses a fixed-size array with two pointers:
-        <code>front</code> (initialised to -1) and
-        <code>rear</code> (initialised to -1). Insert at rear, delete from
-        front.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>Linear Queue — C++ Code</h3>
-      <pre><span class="kw">#define</span> MAX <span class="num">100</span>
-
-<span class="kw">class</span> Queue {
-<span class="kw">private</span>:
-    <span class="kw">int</span> arr[MAX], front, rear;
-
-<span class="kw">public</span>:
-    Queue() { front = rear = -<span class="num">1</span>; }
-
-    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> front == -<span class="num">1</span>; }
-    <span class="kw">bool</span> <span class="fn">isFull</span>()  { <span class="kw">return</span> rear == MAX - <span class="num">1</span>; }
-
-    <span class="cm">// Enqueue — insert at REAR, O(1)</span>
-    <span class="kw">void</span> <span class="fn">enqueue</span>(<span class="kw">int</span> x) {
-        <span class="kw">if</span> (<span class="fn">isFull</span>()) {
-            cout << <span class="str">"Queue Overflow!\n"</span>; <span class="kw">return</span>;
+      }
+      .unit-header {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-left: 6px solid #667eea;
+      }
+      .unit-header h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+        color: #667eea;
+      }
+      .unit-header p {
+        color: #718096;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .hours-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+      }
+      .card h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: #2d3748;
+        border-left: 4px solid #667eea;
+        padding-left: 12px;
+      }
+      .card h4 {
+        font-size: 16px;
+        margin: 16px 0 8px;
+        color: #4a5568;
+      }
+      .card p {
+        color: #718096;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .card li {
+        color: #718096;
+        line-height: 1.8;
+        margin-left: 20px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+      }
+      .topic-card {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .topic-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+      }
+      .topic-card h4 {
+        color: #667eea;
+        margin-bottom: 8px;
+      }
+      .topic-card p {
+        font-size: 13px;
+        color: #718096;
+      }
+      .program-section {
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+      .program-section h4 {
+        color: #e2e8f0;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .program-link {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-decoration: none;
+        margin: 4px 8px 4px 0;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .program-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+      .note-box {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 4px solid #f59e0b;
+        padding: 14px;
+        border-radius: 8px;
+        margin: 16px 0;
+        color: #78350f;
+        font-size: 14px;
+      }
+      .operations-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 13px;
+      }
+      .operations-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .operations-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #718096;
+      }
+      .operations-table tr:hover td {
+        background: #f7fafc;
+      }
+      .code-block {
+        background: #1a202c;
+        color: #e2e8f0;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 12px 0;
+      }
+      .metric-box {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+      }
+      .metric-box .value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #667eea;
+      }
+      .metric-box .label {
+        font-size: 12px;
+        color: #718096;
+        margin-top: 6px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 4px 4px 4px 0;
+      }
+      .badge-blue {
+        background: #dbeafe;
+        color: #0c4a6e;
+      }
+      .badge-green {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-red {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-yellow {
+        background: #fef3c7;
+        color: #78350f;
+      }
+      @media (max-width: 768px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
         }
-        <span class="kw">if</span> (<span class="fn">isEmpty</span>()) front = <span class="num">0</span>;  <span class="cm">// first element</span>
-        arr[++rear] = x;
-        cout << x << <span class="str">" enqueued\n"</span>;
-    }
-
-    <span class="cm">// Dequeue — remove from FRONT, O(1)</span>
-    <span class="kw">int</span> <span class="fn">dequeue</span>() {
-        <span class="kw">if</span> (<span class="fn">isEmpty</span>()) {
-            cout << <span class="str">"Queue Underflow!\n"</span>; <span class="kw">return</span> -<span class="num">1</span>;
+        .header h1 {
+          font-size: 24px;
         }
-        <span class="kw">int</span> val = arr[front];
-        <span class="kw">if</span> (front == rear) front = rear = -<span class="num">1</span>; <span class="cm">// last element</span>
-        <span class="kw">else</span> front++;
-        <span class="kw">return</span> val;
-    }
+        .units-nav {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
 
-    <span class="kw">int</span>  <span class="fn">getFront</span>() { <span class="kw">return</span> arr[front]; }
-    <span class="kw">int</span>  <span class="fn">getRear</span>()  { <span class="kw">return</span> arr[rear];  }
-    <span class="kw">int</span>  <span class="fn">size</span>()     { <span class="kw">return</span> rear - front + <span class="num">1</span>; }
-};</pre>
-    </div>
+    <script>
+      function switchUnit(unitNum) {
+        // Hide all sections
+        for (let i = 1; i <= 5; i++) {
+          const section = document.getElementById("unit" + i);
+          if (section) section.classList.remove("active");
+        }
+        // Show selected section
+        const activeSection = document.getElementById("unit" + unitNum);
+        if (activeSection) activeSection.classList.add("active");
+        // Update button states
+        const buttons = document.querySelectorAll(".unit-btn");
+        buttons.forEach((btn, idx) => {
+          if (idx + 1 === unitNum) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+    </script>
 
-    <div class="card">
-      <h3>Circular Queue — Solving False Overflow</h3>
-      <p>
-        In a linear queue, after many enqueue/dequeue operations, REAR reaches
-        MAX-1 even though front positions are empty.
-        <strong>Circular queue</strong> reuses those positions.
-      </p>
-      <div class="note">
-        📌 REAR = (REAR + 1) % MAX &nbsp;&nbsp; FRONT = (FRONT + 1) % MAX
-      </div>
-      <pre><span class="kw">class</span> CircularQueue {
-<span class="kw">private</span>:
-    <span class="kw">int</span> arr[MAX], front, rear, count;
-
-<span class="kw">public</span>:
-    CircularQueue() { front = <span class="num">0</span>; rear = -<span class="num">1</span>; count = <span class="num">0</span>; }
-
-    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> count == <span class="num">0</span>; }
-    <span class="kw">bool</span> <span class="fn">isFull</span>()  { <span class="kw">return</span> count == MAX; }
-
-    <span class="kw">void</span> <span class="fn">enqueue</span>(<span class="kw">int</span> x) {
-        <span class="kw">if</span> (<span class="fn">isFull</span>()) { cout << <span class="str">"Full!\n"</span>; <span class="kw">return</span>; }
-        rear = (rear + <span class="num">1</span>) % MAX;  <span class="cm">// wrap around!</span>
-        arr[rear] = x;
-        count++;
-    }
-
-    <span class="kw">int</span> <span class="fn">dequeue</span>() {
-        <span class="kw">if</span> (<span class="fn">isEmpty</span>()) { cout << <span class="str">"Empty!\n"</span>; <span class="kw">return</span> -<span class="num">1</span>; }
-        <span class="kw">int</span> val = arr[front];
-        front = (front + <span class="num">1</span>) % MAX;  <span class="cm">// wrap around!</span>
-        count--;
-        <span class="kw">return</span> val;
-    }
-};</pre>
-    </div>
-
-    <div class="card">
-      <h3>State Trace — Queue Operations</h3>
-      <table>
-        <tr>
-          <th>Operation</th>
-          <th>Array</th>
-          <th>front</th>
-          <th>rear</th>
-          <th>Notes</th>
-        </tr>
-        <tr>
-          <td>Init</td>
-          <td>[ ]</td>
-          <td>-1</td>
-          <td>-1</td>
-          <td>Empty</td>
-        </tr>
-        <tr>
-          <td>enqueue(10)</td>
-          <td>[10]</td>
-          <td>0</td>
-          <td>0</td>
-          <td>front set to 0</td>
-        </tr>
-        <tr>
-          <td>enqueue(20)</td>
-          <td>[10,20]</td>
-          <td>0</td>
-          <td>1</td>
-          <td>rear++</td>
-        </tr>
-        <tr>
-          <td>enqueue(30)</td>
-          <td>[10,20,30]</td>
-          <td>0</td>
-          <td>2</td>
-          <td>rear++</td>
-        </tr>
-        <tr>
-          <td>dequeue()</td>
-          <td>[_,20,30]</td>
-          <td>1</td>
-          <td>2</td>
-          <td>Returns 10, front++</td>
-        </tr>
-        <tr>
-          <td>dequeue()</td>
-          <td>[_,_,30]</td>
-          <td>2</td>
-          <td>2</td>
-          <td>Returns 20, front++</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- ============ QUEUE APPLICATIONS ============ -->
-  <div id="queue-app" class="section">
-    <div class="card">
-      <h2>Applications of Queue</h2>
-      <p>
-        Queues are fundamental to systems where order of arrival matters —
-        fairness, scheduling, and sequential processing.
-      </p>
-    </div>
-
-    <div class="grid2" style="gap: 10px">
-      <div class="appcard card">
-        <h4>🖨️ Print Spooler / Job Scheduling</h4>
-        <p>
-          Print jobs are added to a queue. The printer processes them in FIFO
-          order — first submitted, first printed. OS job schedulers (Round
-          Robin) use circular queues for CPU time slots.
-        </p>
-      </div>
-      <div class="appcard card">
-        <h4>🌐 BFS (Breadth-First Search)</h4>
-        <p>
-          Graph/tree traversal uses a queue to explore nodes level by level.
-          Start node enqueued → dequeue → enqueue all unvisited neighbours →
-          repeat. Used in shortest path algorithms.
-        </p>
-      </div>
-      <div class="appcard card">
-        <h4>📞 Call Center / Helpdesk</h4>
-        <p>
-          Incoming calls are queued when agents are busy. First caller waits
-          less. Queue ensures no one is skipped unfairly — fairness through
-          FIFO.
-        </p>
-      </div>
-      <div class="appcard card">
-        <h4>💾 IO Buffers / Keyboard Buffer</h4>
-        <p>
-          Characters typed are stored in a keyboard buffer queue. They are
-          processed by the OS in the order typed, ensuring correct character
-          sequence display.
-        </p>
-      </div>
-      <div class="appcard card">
-        <h4>🔄 Inter-Process Communication</h4>
-        <p>
-          Message queues (like POSIX MQ, RabbitMQ) allow processes/threads to
-          communicate. Producer enqueues messages; consumer dequeues. Used in OS
-          pipelines.
-        </p>
-      </div>
-      <div class="appcard card">
-        <h4>🎮 Simulation Systems</h4>
-        <p>
-          Bank simulations, airport runway scheduling, event-driven systems —
-          all model real-world queues to study wait times and service
-          efficiency.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top: 12px">
-      <h3>Quick Comparison — Stack vs Queue</h3>
-      <table>
-        <tr>
-          <th>Feature</th>
-          <th>Stack</th>
-          <th>Queue</th>
-        </tr>
-        <tr>
-          <td>Principle</td>
-          <td>LIFO</td>
-          <td>FIFO</td>
-        </tr>
-        <tr>
-          <td>Insert end</td>
-          <td>TOP</td>
-          <td>REAR</td>
-        </tr>
-        <tr>
-          <td>Delete end</td>
-          <td>TOP</td>
-          <td>FRONT</td>
-        </tr>
-        <tr>
-          <td>Pointers needed</td>
-          <td>1 (top)</td>
-          <td>2 (front, rear)</td>
-        </tr>
-        <tr>
-          <td>Overflow check</td>
-          <td>top == MAX-1</td>
-          <td>rear == MAX-1</td>
-        </tr>
-        <tr>
-          <td>Underflow check</td>
-          <td>top == -1</td>
-          <td>front == -1 or front > rear</td>
-        </tr>
-        <tr>
-          <td>Key use case</td>
-          <td>Recursion, undo, parsing</td>
-          <td>Scheduling, BFS, buffering</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-<script>
-  function show(id) {
-    document
-      .querySelectorAll(".section")
-      .forEach((s) => s.classList.remove("active"));
-    document
-      .querySelectorAll(".nav button")
-      .forEach((b) => b.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    event.target.classList.add("active");
-  }
-
-  // --- Array Visualizer ---
-  let arrData = [14, 27, 33, 51, 68, 72, 85, 90];
-  function renderArr() {
-    const d = document.getElementById("arr-display");
-    d.innerHTML = arrData
-      .map((v, i) => `<span class="arr-cell" id="ac${i}">${v}</span>`)
-      .join("");
-  }
-  function arrSet() {
-    const i = parseInt(document.getElementById("arr-idx").value);
-    const v = parseInt(document.getElementById("arr-val").value);
-    if (i < 0 || i > 7 || isNaN(v)) {
-      document.getElementById("arr-log").textContent =
-        "Invalid index or value!";
-      return;
-    }
-    arrData[i] = v;
-    renderArr();
-    document.getElementById(`ac${i}`).classList.add("highlight");
-    document.getElementById("arr-log").textContent =
-      `A[${i}] = ${v} | Address = Base + ${i}×4 bytes`;
-  }
-  function arrAccess() {
-    const i = parseInt(document.getElementById("arr-idx").value);
-    if (i < 0 || i > 7) {
-      document.getElementById("arr-log").textContent =
-        "Index out of range (0-7)!";
-      return;
-    }
-    document
-      .querySelectorAll(".arr-cell")
-      .forEach((c) => c.classList.remove("highlight"));
-    document.getElementById(`ac${i}`).classList.add("highlight");
-    document.getElementById("arr-log").textContent =
-      `A[${i}] = ${arrData[i]} | O(1) direct access via address formula`;
-  }
-  function arrReset() {
-    arrData = [14, 27, 33, 51, 68, 72, 85, 90];
-    renderArr();
-    document.getElementById("arr-log").textContent =
-      "Array reset to default values.";
-  }
-  renderArr();
-
-  // --- Stack Visualizer ---
-  let stackData = [],
-    stackMax = 6;
-  function renderStack() {
-    const d = document.getElementById("stack-display");
-    if (stackData.length === 0) {
-      d.innerHTML =
-        '<span style="font-size:12px;color:var(--color-text-tertiary)">Empty stack</span>';
-      return;
-    }
-    d.innerHTML = stackData
-      .map((v, i) => {
-        let cls = "arr-cell";
-        if (i === stackData.length - 1) cls += " top";
-        return `<div style="display:flex;align-items:center;gap:6px"><span class="${cls}">${v}</span>${i === stackData.length - 1 ? '<span style="font-size:11px;color:var(--color-text-success)">← TOP</span>' : ""}</div>`;
-      })
-      .join("");
-  }
-  function stackPush() {
-    const v = parseInt(document.getElementById("stack-val").value);
-    if (isNaN(v)) return;
-    if (stackData.length >= stackMax) {
-      document.getElementById("stack-log").textContent =
-        "⚠️ Stack Overflow! Cannot push — stack is full.";
-      return;
-    }
-    stackData.push(v);
-    renderStack();
-    document.getElementById("stack-log").textContent =
-      `✅ push(${v}) → top = ${stackData.length - 1}, size = ${stackData.length}`;
-  }
-  function stackPop() {
-    if (stackData.length === 0) {
-      document.getElementById("stack-log").textContent =
-        "⚠️ Stack Underflow! Cannot pop — stack is empty.";
-      return;
-    }
-    const v = stackData.pop();
-    renderStack();
-    document.getElementById("stack-log").textContent =
-      `✅ pop() → removed ${v}, top = ${stackData.length - 1}, size = ${stackData.length}`;
-  }
-  function stackPeek() {
-    if (stackData.length === 0) {
-      document.getElementById("stack-log").textContent =
-        "⚠️ Stack is empty — nothing to peek!";
-      return;
-    }
-    document.getElementById("stack-log").textContent =
-      `👀 peek() → top element is ${stackData[stackData.length - 1]} (not removed)`;
-  }
-  function stackReset() {
-    stackData = [];
-    renderStack();
-    document.getElementById("stack-log").textContent = "Stack cleared!";
-  }
-  renderStack();
-
-  // --- Queue Visualizer ---
-  let queueData = [],
-    queueMax = 7;
-  function renderQueue() {
-    const d = document.getElementById("queue-display");
-    const l = document.getElementById("queue-labels");
-    if (queueData.length === 0) {
-      d.innerHTML =
-        '<span style="font-size:12px;color:var(--color-text-tertiary)">Empty queue</span>';
-      l.textContent = "";
-      return;
-    }
-    d.innerHTML = queueData
-      .map((v, i) => {
-        let cls = "arr-cell";
-        if (i === 0) cls += " top";
-        if (i === queueData.length - 1 && queueData.length > 1)
-          cls += " highlight";
-        return `<span class="${cls}">${v}</span>`;
-      })
-      .join("");
-    l.innerHTML =
-      '<span style="color:var(--color-text-success)">↑ FRONT</span>' +
-      "&nbsp;".repeat(Math.max(0, (queueData.length - 2) * 6)) +
-      (queueData.length > 1
-        ? '<span style="color:var(--color-text-warning)">↑ REAR</span>'
-        : "");
-  }
-  function queueEnqueue() {
-    const v = parseInt(document.getElementById("queue-val").value);
-    if (isNaN(v)) return;
-    if (queueData.length >= queueMax) {
-      document.getElementById("queue-log").textContent =
-        "⚠️ Queue Overflow! Cannot enqueue — queue is full.";
-      return;
-    }
-    queueData.push(v);
-    renderQueue();
-    document.getElementById("queue-log").textContent =
-      `✅ enqueue(${v}) at REAR → size = ${queueData.length}`;
-  }
-  function queueDequeue() {
-    if (queueData.length === 0) {
-      document.getElementById("queue-log").textContent =
-        "⚠️ Queue Underflow! Cannot dequeue — queue is empty.";
-      return;
-    }
-    const v = queueData.shift();
-    renderQueue();
-    document.getElementById("queue-log").textContent =
-      `✅ dequeue() → removed ${v} from FRONT → size = ${queueData.length}`;
-  }
-  function queueReset() {
-    queueData = [];
-    renderQueue();
-    document.getElementById("queue-log").textContent = "Queue cleared!";
-  }
-  renderQueue();
-</script>
+    <veepn-lock-screen
+      ><style>
+        @font-face {
+          font-family: FigtreeVF;
+          src:
+            url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2)
+              format("woff2 supports variations"),
+            url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2)
+              format("woff2-variations");
+          font-weight: 100 1000;
+          font-display: swap;
+        }
+      </style></veepn-lock-screen
+    >
+  </body>
+  <grammarly-desktop-integration
+    data-grammarly-shadow-root="true"
+  ></grammarly-desktop-integration>
+</html>
